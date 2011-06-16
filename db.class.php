@@ -36,7 +36,6 @@ class db extends mysqli {
 	const ERR_CLONE = 6003;
 
 	// A private constructor; prevents direct creation of object
-	// A private constructor; prevents direct creation of object
 	private function __construct($server = "localhost", $username = "", $password = "", $schema = ""){
 		$this->database = $schema;
 
