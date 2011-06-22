@@ -12,17 +12,17 @@ abstract class BaseIterator implements Iterator, ArrayAccess
 
 	protected abstract function getNextValue();
 
-	private function exists()
+	private function exists($position)
 	{
 		//var_dump(__METHOD__);
-		return isset($this->cache[$this->position]);
+		return isset($this->cache[$position]);
 	}
 
-	private function moveForward()
+	private function updateCache($position)
 	{
 //		var_dump(__METHOD__);
 //		var_dump($this->cache, $this->position);
-		while (count($this->cache) <= $this->position)
+		while (count($this->cache) <= $position)
 		{
 			$next = $this->getNextValue();
 			if ($next === null)
@@ -33,12 +33,12 @@ abstract class BaseIterator implements Iterator, ArrayAccess
 		}
 	}
 
-	private function ensureUpToDate()
+	private function ensureCacheTo($position)
 	{
 //		var_dump(__METHOD__);
-		if (!$this->exists())
+		if (!$this->exists($position))
 		{
-			$this->moveForward();
+			$this->updateCache($position);
 		}
 	}
 
@@ -51,7 +51,7 @@ abstract class BaseIterator implements Iterator, ArrayAccess
 	public function current()
 	{
 //		var_dump(__METHOD__);
-		$this->ensureUpToDate();
+		$this->ensureCacheTo($this->position);
 		return $this->cache[$this->position];
 	}
 
@@ -67,9 +67,14 @@ abstract class BaseIterator implements Iterator, ArrayAccess
 
 	public function valid()
 	{
-		$this->ensureUpToDate();
-		$exists = $this->exists();
+		$this->ensureCacheTo($this->position);
+		$exists = $this->exists($this->position);
 		return $exists;
+	}
+
+	private function validateOffset($offset)
+	{
+		return is_int($offset);
 	}
 
 	public function offsetSet($offset, $value)
@@ -80,6 +85,11 @@ abstract class BaseIterator implements Iterator, ArrayAccess
 
 	public function offsetExists($offset)
 	{
+		if (!$this->validateOffset($offset))
+		{
+			return false;
+		}
+		$this->ensureCacheTo($offset);
 		return isset($this->cache[$offset]);
 	}
 
@@ -90,7 +100,11 @@ abstract class BaseIterator implements Iterator, ArrayAccess
 
 	public function offsetGet($offset)
 	{
-		return isset($this->cache[$offset]) ? $this->cache[$offset] : null;
+		if ($this->offsetExists($offset))
+		{
+			return $this->cache[$offset];
+		}
+		return null;
 	}
 }
 
@@ -117,4 +131,6 @@ for ($j = 0; $j < 3; $j++)
 	{
 		var_dump($v);
 	}
+	echo '[6] : ';
+	var_dump($i[6]);
 }
