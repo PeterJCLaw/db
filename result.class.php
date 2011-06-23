@@ -1,12 +1,12 @@
 <?php
 
+require_once('iterator.class.php');
+
 /**
  * A wrapper object for a sql query result.
  * Capable of generating php-typed values, rather than just strings.
  */
-// TODO: implement ArrayAccess
-// TODO: implement Iterator
-class Result
+class Result extends BaseIterator
 {
 	private $res;
 
@@ -16,11 +16,6 @@ class Result
 	private $fieldTypes;
 
 	/**
-	 * Cache of the rows in this query result.
-	 */
-	private $rows;
-
-	/**
 	 * @param result The result handle for the results this object represents.
 	 */
 	public function __construct($result)
@@ -28,10 +23,17 @@ class Result
 		$this->res = $result;
 	}
 
-	public function getRow()
+	public function getNextValue()
 	{
-		$this->fetchTypes();
 		$row = $this->res->fetch_assoc();
+
+		// detect that we've run out of rows
+		if ($row === null)
+		{
+			return $null;
+		}
+
+		$this->fetchTypes();
 		foreach ($this->fieldTypes as $name => $type)
 		{
 			settype($row[$name], $type);
