@@ -1,4 +1,3 @@
-<pre>
 <?php
 
 abstract class BaseIterator implements Iterator, ArrayAccess
@@ -106,31 +105,4 @@ abstract class BaseIterator implements Iterator, ArrayAccess
 		}
 		return null;
 	}
-}
-
-class MyIterator extends BaseIterator
-{
-	protected function getNextValue()
-	{
-//		var_dump(__METHOD__);
-		static $count = 0;
-		if (++$count % 5 == 0)
-		{
-			return null;
-		}
-		return $count;
-	}
-}
-
-$i = new MyIterator();
-var_dump($i);
-
-for ($j = 0; $j < 3; $j++)
-{
-	foreach ($i as $v)
-	{
-		var_dump($v);
-	}
-	echo '[6] : ';
-	var_dump($i[6]);
 }
