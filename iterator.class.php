@@ -13,14 +13,11 @@ abstract class BaseIterator implements Iterator, ArrayAccess
 
 	private function exists($position)
 	{
-		//var_dump(__METHOD__);
 		return isset($this->cache[$position]);
 	}
 
 	private function updateCache($position)
 	{
-//		var_dump(__METHOD__);
-//		var_dump($this->cache, $this->position);
 		while (count($this->cache) <= $position)
 		{
 			$next = $this->getNextValue();
@@ -34,7 +31,6 @@ abstract class BaseIterator implements Iterator, ArrayAccess
 
 	private function ensureCacheTo($position)
 	{
-//		var_dump(__METHOD__);
 		if (!$this->exists($position))
 		{
 			$this->updateCache($position);
@@ -43,13 +39,11 @@ abstract class BaseIterator implements Iterator, ArrayAccess
 
 	public function rewind()
 	{
-		var_dump(__METHOD__);
 		$this->position = 0;
 	}
 
 	public function current()
 	{
-//		var_dump(__METHOD__);
 		$this->ensureCacheTo($this->position);
 		return $this->cache[$this->position];
 	}
