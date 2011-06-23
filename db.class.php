@@ -38,7 +38,7 @@ class db extends mysqli {
 	const ERR_CLONE = 6003;
 
 	// A protected constructor; prevents direct creation of object
-	protected function __construct($server = "localhost", $username = "", $password = "", $schema = ""){
+	protected function __construct($server = "localhost", $username = "", $password = "", $schema = "") {
 		$this->database = $schema;
 
 		// Prevents mysql sock warnings. I prefer to throw exception as below.
