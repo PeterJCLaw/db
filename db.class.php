@@ -282,7 +282,7 @@ class db extends mysqli {
 		if(is_bool($result)) {
 				$out[] = "";
 		} else {
-			$out[] = new Result($result);
+			$out = new Result($result);
 		}
 		return $out;
 	}
