@@ -282,7 +282,7 @@ class db extends mysqli {
 		if(is_bool($result)) {
 				$out[] = "";
 		} else {
-			while($row = $result->fetch_assoc()) $out[] = $row;
+			$out[] = new Result($res);
 		}
 		return $out;
 	}
