@@ -30,7 +30,7 @@ class Result extends BaseIterator
 		// detect that we've run out of rows
 		if ($row === null)
 		{
-			return $null;
+			return null;
 		}
 
 		$this->fetchTypes();
