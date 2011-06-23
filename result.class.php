@@ -50,11 +50,11 @@ class Result extends BaseIterator
 		{
 			return;
 		}
+
 		foreach ($this->res->fetch_fields() as $key => $fieldInfo)
 		{
 			$this->fieldTypes[$fieldInfo->name] = self::typeNameFromInfo($fieldInfo);
 		}
-		var_dump($this->fieldTypes);
 	}
 
 	/**
